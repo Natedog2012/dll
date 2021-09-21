@@ -60,6 +60,8 @@ typedef enum eStatEntry
 	eStatSynergyLevel10,
 	eStatSynergyLevel11,
 	eStatSynergyLevel12,
+	eStatLevel,
+	eStatDummy,
 	eStatMax
 };
 
@@ -627,7 +629,11 @@ std::string GetStringWeightFloatRepresentationOfStat(eStatEntry statType)
 
 	if (statEntries.find(statType) != statEntries.end())
 	{
-		double num_val = (statItr)->second / 10.0;
+		double num_val = (statItr)->second / 1.25;
+		
+		if (num_val >= 2000) {
+			num_val = 2000.00;
+		}
 
 		std::stringstream strStream(stringstream::in | stringstream::out);
 		strStream << num_val;
@@ -1306,6 +1312,7 @@ PLUGIN_API VOID InitializeMQ2Labels(VOID)
 	eqTypesMap[EQLabelTypes::SynergyLevel10] = EQSynergyLabelFunction;
 	eqTypesMap[EQLabelTypes::SynergyLevel11] = EQSynergyLabelFunction;
 	eqTypesMap[EQLabelTypes::SynergyLevel12] = EQSynergyLabelFunction;
+	eqTypesMap[EQLabelTypes::Level] = EQLabelFunction;
 
 	statLabelMappings[EQLabelTypes::CurrentHitPoints] = eStatEntry::eStatCurHP;
 	statLabelMappings[EQLabelTypes::ManaNumber] = eStatEntry::eStatCurMana;
@@ -1356,6 +1363,7 @@ PLUGIN_API VOID InitializeMQ2Labels(VOID)
 	statLabelMappings[EQLabelTypes::SynergyLevel10] = eStatEntry::eStatSynergyLevel10;
 	statLabelMappings[EQLabelTypes::SynergyLevel11] = eStatEntry::eStatSynergyLevel11;
 	statLabelMappings[EQLabelTypes::SynergyLevel12] = eStatEntry::eStatSynergyLevel12;
+	statLabelMappings[EQLabelTypes::Level] = eStatEntry::eStatLevel;
 
 
     // Add commands, macro parameters, hooks, etc.

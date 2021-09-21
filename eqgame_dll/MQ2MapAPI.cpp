@@ -775,8 +775,7 @@ bool MapSelectTarget()
     if (!pCurrentMapLabel)
         return false;
 
-	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
-        pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM)
+	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn)
        return false;
 
 
@@ -1059,20 +1058,21 @@ void GenerateSpawnLabel(PMAPSPAWN& pMapSpawn, DWORD Color, DWORD TrackingDist)
 	pMapSpawn->pMapLabel->Layer = 2;
 	pMapSpawn->pMapLabel->Size = 3;
 
-	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
-		pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM && pMapSpawn && pMapSpawn->pSpawn && !IsGroupMember(pMapSpawn->pSpawn) && DistanceToSpawn(pLocalPlayer->Data.pSpawn, pMapSpawn->pSpawn) > TrackingDist) {
-		if (pMapSpawn->pMapLabel->Label)
-			free(pMapSpawn->pMapLabel->Label);
-		pMapSpawn->pMapLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, pMapSpawn->pSpawn->Type == SPAWN_PLAYER ? " " : "Mob");
-	}
-	else
-	{
-		if(pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type == SPAWN_PLAYER)
-			pMapSpawn->pMapLabel->Layer = 3;
-		if (pMapSpawn->pMapLabel->Label)
-			free(pMapSpawn->pMapLabel->Label);
-		pMapSpawn->pMapLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, MapNameString);
-	}
+	//if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
+	//	pLocalPlayer && pLocalPlayer->Data.pSpawn && pMapSpawn && pMapSpawn->pSpawn && !IsGroupMember(pMapSpawn->pSpawn)) {  // && DistanceToSpawn(pLocalPlayer->Data.pSpawn, pMapSpawn->pSpawn) > TrackingDist
+	//	if (pMapSpawn->pMapLabel->Label)
+	//		free(pMapSpawn->pMapLabel->Label);
+	//	pMapSpawn->pMapLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, pMapSpawn->pSpawn->Type == SPAWN_PLAYER ? " " : "Mob");
+	//}
+	//else
+	//{
+	//	if(pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type == SPAWN_PLAYER)
+	//		pMapSpawn->pMapLabel->Layer = 3;
+	//	if (pMapSpawn->pMapLabel->Label)
+	//		free(pMapSpawn->pMapLabel->Label);
+	//	pMapSpawn->pMapLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, MapNameString);
+	//}
+	pMapSpawn->pMapLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, MapNameString);
 	pMapSpawn->pMapLabel->Color.ARGB = Color;
 	pMapSpawn->pMapLabel->Width = 20;
 	pMapSpawn->pMapLabel->Height = 14;
@@ -1090,16 +1090,17 @@ PMAPLABEL GenerateLabel(PMAPSPAWN pMapSpawn, DWORD Color)
     pLabel->Layer = 2;
     pLabel->Size = 3;
 
-	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
-        pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM && pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type != SPAWN_PLAYER && !IsGroupMember(pMapSpawn->pSpawn)) {
-			pLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, pMapSpawn->pSpawn->Type == SPAWN_PLAYER ? " " : "Mob");
-	}
-	else
-	{
-		pLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, MapNameString);
-		if (pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type == SPAWN_PLAYER)
-			pLabel->Layer = 3;
-	}
+	//if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
+    //    pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM && pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type != SPAWN_PLAYER && !IsGroupMember(pMapSpawn->pSpawn)) {
+	//		pLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, pMapSpawn->pSpawn->Type == SPAWN_PLAYER ? " " : "Mob");
+	//}
+	//else
+	//{
+	//	pLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn, MapNameString);
+	//	if (pMapSpawn && pMapSpawn->pSpawn && pMapSpawn->pSpawn->Type == SPAWN_PLAYER)
+	//		pLabel->Layer = 3;
+	//}
+	pLabel->Label = GenerateSpawnName(pMapSpawn->pSpawn,MapNameString);
     pLabel->Color.ARGB = Color;
     pLabel->Width = 20;
     pLabel->Height= 14;

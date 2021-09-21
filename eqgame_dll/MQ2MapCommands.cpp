@@ -408,8 +408,7 @@ DWORD ParseCombo(PCHAR Combo)
 VOID MapClickCommand(PSPAWNINFO pChar, PCHAR szLine)
 {
 
-	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn ||
-       pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM)
+	if (!pLocalPlayer || pLocalPlayer && !pLocalPlayer->Data.pSpawn) // ||pLocalPlayer && pLocalPlayer->Data.pSpawn && !pLocalPlayer->Data.pSpawn->GM
       return;
 
     if (!szLine[0])

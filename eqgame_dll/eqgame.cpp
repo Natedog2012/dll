@@ -1040,13 +1040,13 @@ void InitHooks()
 	   //basedata as spell CRC end
 
 
-	   var = (((DWORD)0x0044410C - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic Stamina
-
-	   var = (((DWORD)0x00442B36 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic int
-	   var = (((DWORD)0x00442BB6 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic wis
+	   //var = (((DWORD)0x0044410C - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic Stamina
+	   //
+	   //var = (((DWORD)0x00442B36 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic int
+	   //var = (((DWORD)0x00442BB6 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Remove heroic wis
 
 	   //#pragma comment(lib, "Iphlpapi.lib")
 
@@ -1060,22 +1060,22 @@ void InitHooks()
 
 	   DWORD varArray = (((DWORD)0x009BFF6D - 0x400000) + baseAddress);
 
-	   var = (((DWORD)0x004ED03B - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x4C", 1); // Link stuff
-	   var = (((DWORD)0x004ED051 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
-	   var = (((DWORD)0x004ED072 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
-	   var = (((DWORD)0x007BBC9A - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
-	   var = (((DWORD)0x007BBD77 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
-
-	   var = (((DWORD)0x009BFF6D - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x25\x30\x38\x58", 4); // Link stuff
-
-	   var = (((DWORD)0x00A1ACE0 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x4F", 1); // Link stuff
+	   //var = (((DWORD)0x004ED03B - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x4C", 1); // Link stuff
+	   //var = (((DWORD)0x004ED051 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
+	   //var = (((DWORD)0x004ED072 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
+	   //var = (((DWORD)0x007BBC9A - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
+	   //var = (((DWORD)0x007BBD77 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, (DWORD*)&varArray, 4); // Link stuff
+	   //
+	   //var = (((DWORD)0x009BFF6D - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x25\x30\x38\x58", 4); // Link stuff
+	   //
+	   //var = (((DWORD)0x00A1ACE0 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x4F", 1); // Link stuff
 
 	   var = (((DWORD)0x004ED062 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
@@ -1089,11 +1089,11 @@ void InitHooks()
 	   var = (((DWORD)0x0063978E - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Bazaar trader anywhere
 
-	   var = (((DWORD)0x006AB6AF - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xE9\xA5\x00", 5); // nop / jmp dmg bonus
-
-	   var = (((DWORD)0x006AB6B6 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90", 1); // nop / jmp dmg bonus
+	   //var = (((DWORD)0x006AB6AF - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xE9\xA5\x00", 5); // nop / jmp dmg bonus
+	   //
+	   //var = (((DWORD)0x006AB6B6 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90", 1); // nop / jmp dmg bonus
 
 	   var = (((DWORD)0x00632DE6 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
@@ -1110,14 +1110,14 @@ void InitHooks()
 	   var = (((DWORD)0x005FE751 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\xEB\x1C\x90\x90\x90", 5); // patchme req bypass
 
-	   var = (((DWORD)0x006A3FB0 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // nop / jmp dmg bonus #2
+	   //var = (((DWORD)0x006A3FB0 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // nop / jmp dmg bonus #2
 
 	   var = (((DWORD)0x0057F2C7 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\xBF\xFF\xFF\xFF\x0F\x90\x90\x90\xE9\xF4\x01\x00\x00\x90", 14); //patch stat cap to be 0x0FFFFFFF
 
-	   var = (((DWORD)0x0069A3D1 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\xB8\x60\xEA\x00\x00\x90", 6); //reuse time hack, up to 1 minute
+	   //var = (((DWORD)0x0069A3D1 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\xB8\x60\xEA\x00\x00\x90", 6); //reuse time hack, up to 1 minute
 
 
 	   // Spells BEGIN
@@ -1158,12 +1158,11 @@ void InitHooks()
 	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",
 		   12); // Fix max HP cap
 
-	   var = (((DWORD)0x0045F26E - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\xE9\xB3\x01\x00\x00\x90",
-		   11); // Disable regen ticks // maybe hp
+	   //var = (((DWORD)0x0045F26E - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\xE9\xB3\x01\x00\x00\x90",11); // Disable regen ticks // maybe hp
 
-	  var = (((DWORD)0x0045E376 - 0x400000) + baseAddress);
-	  PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90", 8); // No unconscious pls
+	   var = (((DWORD)0x0045E376 - 0x400000) + baseAddress);
+	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90", 8); // No unconscious pls
 
 	   var = (((DWORD)0x0045E381 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90", 8); // No unconscious pls
@@ -1174,20 +1173,16 @@ void InitHooks()
 	   var = (((DWORD)0x00449F62 - 0x400000) + baseAddress); // HP fix - the real deal
 	   PatchA((DWORD*)var, "\x90\x90", 2);
 	   var = (((DWORD)0x00449F64 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",
-		   13); // Fix current HP cap
+	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",13); // Fix current HP cap
 
 	   var = (((DWORD)0x00444308 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",
-		   4); // Fix current mana amounts
+	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current mana amounts
 
 	   var = (((DWORD)0x00444198 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",
-		   4); // Fix current endur
+	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current endur
 
 	   var = (((DWORD)0x0045AE9F - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xE9\x76\x03\x00\x00\x90",
-		   8); // Fix food/drink spam
+	   PatchA((DWORD*)var, "\x90\x90\xE9\x76\x03\x00\x00\x90",8); // Fix food/drink spam
 
 	   var = (((DWORD)0x0045385D - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 30); //hp damage in combat abilities fix
@@ -1244,6 +1239,7 @@ void InitHooks()
 	   charToBreak = rand();
 	   var = (((DWORD)0x009DD260 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, (DWORD*)&charToBreak, 4);
+
 	   HMODULE hkernel32Mod = GetModuleHandle("kernel32.dll");
 	   DWORD gmfadress = (DWORD)GetProcAddress(hkernel32Mod, "GetModuleFileNameA");
 	   EzDetour(gmfadress, GetModuleFileNameA_detour, GetModuleFileNameA_tramp);
