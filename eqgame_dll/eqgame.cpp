@@ -18,6 +18,7 @@
 #include <iphlpapi.h>
 #include <IPTypes.h>
 #include "spaghetti.h"
+#include "natedog.h"
 
 #pragma comment(lib, "Iphlpapi.lib")
 
@@ -93,6 +94,8 @@ void PatchA(LPVOID address, const void *dwValue, SIZE_T dwBytes) {
 	memcpy((void *)address, dwValue, dwBytes);
 	VirtualProtect((void *)address, dwBytes, oldProtect, &oldProtect);
 }
+
+
 
 char bMySEQDetected = 3;
 
@@ -961,27 +964,27 @@ BOOL __stdcall SetDeviceGammaRamp_Hook(HDC hdc, LPVOID lpRamp)
 extern CRITICAL_SECTION gDetourCS;
 void InitHooks()
 {
-   rename("arena.eqg", "arena.eqg.bak");
-   rename("highpasshold.eqg", "highpasshold.eqg.bak");
-   rename("nektulos.eqg", "nektulos.eqg.bak");
-   rename("lavastorm.eqg", "lavastorm.eqg.bak");
+   //rename("arena.eqg", "arena.eqg.bak");
+   //rename("highpasshold.eqg", "highpasshold.eqg.bak");
+   //rename("nektulos.eqg", "nektulos.eqg.bak");
+   //rename("lavastorm.eqg", "lavastorm.eqg.bak");
 
    InitOffsets();
    GetEQPath(gszEQPath);
    InitializeCriticalSection(&gDetourCS);
    InitializeMQ2Detours();
    InitializeDisplayHook();
-   InitializeChatHook();
-   InitializeMQ2Commands();
-   InitializeMQ2Windows();
-   InitializeMQ2Pulse();
-   InitializeMQ2Spawns();
-   InitializeMapPlugin();
-   InitializeMQ2ItemDisplay();
-   InitializeMQ2Labels();
+   //InitializeChatHook();
+   //InitializeMQ2Commands();
+   //InitializeMQ2Windows();
+   //InitializeMQ2Pulse();
+   //InitializeMQ2Spawns();
+   //InitializeMapPlugin();
+   //InitializeMQ2ItemDisplay();
+   //InitializeMQ2Labels();
 #ifdef DPSPLUGIN
-   InitializeEdgeDPSPlugin();
-   InitializeDPSPlugin();
+   //InitializeEdgeDPSPlugin();
+   //InitializeDPSPlugin();
 #endif
 
 	//heqwMod
@@ -1010,9 +1013,12 @@ void InitHooks()
 
    if (baseAddress) {
 
+	   InjectCustomZones();
+
+
 	   DWORD var = (((DWORD)0x008C4CE0 - 0x400000) + baseAddress);
 
-	   EzDetour((DWORD)var, SendMessage_Detour, SendMessage_Trampoline);
+	   //EzDetour((DWORD)var, SendMessage_Detour, SendMessage_Trampoline);
 
 
 	   var = (((DWORD)0x004C3250 - 0x400000) + baseAddress);
@@ -1083,11 +1089,11 @@ void InitHooks()
 	   var = (((DWORD)0x004ED083 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
 
-	   var = (((DWORD)0x0063C36F - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90", 4); // Bazaar trader anywhere
-
-	   var = (((DWORD)0x0063978E - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Bazaar trader anywhere
+	   //var = (((DWORD)0x0063C36F - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\x90\x90", 4); // Bazaar trader anywhere
+	   //
+	   //var = (((DWORD)0x0063978E - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // Bazaar trader anywhere
 
 	   //var = (((DWORD)0x006AB6AF - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\xE9\xA5\x00", 5); // nop / jmp dmg bonus
@@ -1095,17 +1101,17 @@ void InitHooks()
 	   //var = (((DWORD)0x006AB6B6 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90", 1); // nop / jmp dmg bonus
 
-	   var = (((DWORD)0x00632DE6 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
-
-	   var = (((DWORD)0x00632DDF - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
-
-	   var = (((DWORD)0x00632DF6 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
-
-	   var = (((DWORD)0x00632E08 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
+	   //var = (((DWORD)0x00632DE6 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
+	   //
+	   //var = (((DWORD)0x00632DDF - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
+	   //
+	   //var = (((DWORD)0x00632DF6 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
+	   //
+	   //var = (((DWORD)0x00632E08 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
 
 	   var = (((DWORD)0x005FE751 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\xEB\x1C\x90\x90\x90", 5); // patchme req bypass
@@ -1113,8 +1119,8 @@ void InitHooks()
 	   //var = (((DWORD)0x006A3FB0 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // nop / jmp dmg bonus #2
 
-	   var = (((DWORD)0x0057F2C7 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\xBF\xFF\xFF\xFF\x0F\x90\x90\x90\xE9\xF4\x01\x00\x00\x90", 14); //patch stat cap to be 0x0FFFFFFF
+	   //var = (((DWORD)0x0057F2C7 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\xBF\xFF\xFF\xFF\x0F\x90\x90\x90\xE9\xF4\x01\x00\x00\x90", 14); //patch stat cap to be 0x0FFFFFFF
 
 	   //var = (((DWORD)0x0069A3D1 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\xB8\x60\xEA\x00\x00\x90", 6); //reuse time hack, up to 1 minute
@@ -1218,7 +1224,7 @@ void InitHooks()
 	   //var = (((DWORD)0x00709AC1 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\xE9\xD0\x00\x90",
 		  // 10); // Nop the gamma slider
-
+		/*
 	   auto charToBreak = rand();
 
 	   var = (((DWORD)0x009DD250 - 0x400000) + baseAddress);
@@ -1239,6 +1245,7 @@ void InitHooks()
 	   charToBreak = rand();
 	   var = (((DWORD)0x009DD260 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, (DWORD*)&charToBreak, 4);
+	   */
 
 	   HMODULE hkernel32Mod = GetModuleHandle("kernel32.dll");
 	   DWORD gmfadress = (DWORD)GetProcAddress(hkernel32Mod, "GetModuleFileNameA");
@@ -1613,3 +1620,6 @@ LPCDIDATAFORMAT WINAPI GetdfDIJoystick()
 
    return m_pGetdfDIJoystick();
 }
+
+
+

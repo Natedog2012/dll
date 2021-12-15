@@ -196,6 +196,7 @@
     <ClInclude Include="MQ2Globals.h" />
     <ClInclude Include="MQ2Main.h" />
     <ClInclude Include="MQ2Prototypes.h" />
+    <ClInclude Include="natedog.h" />
     <ClInclude Include="RECTF.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="RenderHooks.h" />
