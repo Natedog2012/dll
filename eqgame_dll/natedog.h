@@ -51,7 +51,7 @@ char* __fastcall InjectCustomZones_Detour(char* pThis, char* pPtr, unsigned __in
 			ADDZONE(795,"cosul","LOL New Zones"),
 			ADDZONE(796,"codecayb","LOL New Zones"),
 			ADDZONE(797,"exaltedb","LOL New Zones"),
-			ADDZONE(798,"pohealth","LOL New Zones"),
+			ADDZONE(798,"pohealth","Plane of Health"),
 			ADDZONE(799,"korshaint","LOL New Zones"),
 			ADDZONE(800,"chardoktwo","LOL New Zones"),
 			ADDZONE(813,"charasistwo","LOL New Zones"),
