@@ -1070,6 +1070,7 @@ void InitHooks()
 
 	   //#pragma comment(lib, "Iphlpapi.lib")
 
+	   /*
 	   var = (((DWORD)0x004538AE - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\xEB",
 		   3); // Fix Max HP setting
@@ -1077,6 +1078,7 @@ void InitHooks()
 	   var = (((DWORD)0x0065CC09 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\x90\x90",
 		   4); // Fix tradeskill containers
+		   */
 
 	   DWORD varArray = (((DWORD)0x009BFF6D - 0x400000) + baseAddress);
 
@@ -1097,11 +1099,11 @@ void InitHooks()
 	   //var = (((DWORD)0x00A1ACE0 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x4F", 1); // Link stuff
 
-	   var = (((DWORD)0x004ED062 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
-
-	   var = (((DWORD)0x004ED083 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
+	   //var = (((DWORD)0x004ED062 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
+	   //
+	   //var = (((DWORD)0x004ED083 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x08", 1); // Fix current HP cap
 
 	   //var = (((DWORD)0x0063C36F - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\x90\x90", 4); // Bazaar trader anywhere
