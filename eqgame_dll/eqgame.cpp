@@ -587,6 +587,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD *con, unsigned __int32 unk, un
 	int16_t opcode = 0;
 	memcpy(&opcode, buf, 2);
 
+	/*
 	if (opcode == 0xf13 || opcode == 0x578f)
 	{
 		//if (opcode == 0xf13) //only need to do this once
@@ -812,6 +813,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD *con, unsigned __int32 unk, un
 		delete scs;
 		return retval;
 	}
+	*/
 
 	retval = SendMessage_Trampoline(con, unk, channel, buf,
 		size, a6, a7);
