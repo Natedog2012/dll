@@ -2,22 +2,63 @@
 
 #include "MQ2Main.h"
 
-int duel_first;
-int duel_second;
-inline void set_first(int value) {
-	duel_first = value;
+
+int spoof_target_id;
+int spoof_my_id;
+int spoof_opcode;
+
+inline void set_target_id(int value) {
+	spoof_target_id = value;
 }
-inline void set_second(int value) {
-	duel_second = value;
+inline int get_target_id() {
+	return spoof_target_id;
 }
 
-inline int get_first() {
-	return duel_first;
-}
-inline int get_second() {
-	return duel_second;
+inline int get_my_id() {
+	return spoof_my_id;
 }
 
+inline void set_my_id(int value) {
+	spoof_my_id = value;
+}
+
+
+
+inline void set_spoof_opcode(int value) {
+	spoof_opcode = value;
+}
+inline int get_spoof_opcode() {
+	return spoof_opcode;
+}
+
+struct Duel_Fuck
+{
+	uint16_t opcode;
+	int duel_initiator;
+	int duel_target;
+};
+
+struct PickPocket_Struct {
+	uint16_t opcode;
+	int to;
+	int from;
+	uint16_t myskill;
+	uint8_t type; // -1 you are being picked, 0 failed , 1 = plat, 2 = gold, 3 = silver, 4 = copper, 5 = item
+	uint8_t unknown1; // 0 for response, unknown for input
+	uint32_t coin;
+	uint8_t lastsix[2];
+};
+
+struct ClientTarget_Struct {
+	uint16_t opcode;
+	uint32_t new_target;
+};
+
+struct SetTitle_Struct {
+	uint16_t opcode;
+	uint32_t is_suffix;	//guessed: 0 = prefix, 1 = suffix
+	uint32_t title_id;
+};
 
 
 
@@ -148,12 +189,7 @@ unsigned char __fastcall HandleWorldMessage_Detour(DWORD* con, DWORD edx, unsign
 	return HandleWorldMessage_Trampoline(con, edx, unk, opcode, buf, size);
 }
 
-struct Duel_Fuck
-{
-	uint16_t opcode;
-	int duel_initiator;
-	int duel_target;
-};
+
 
 DETOUR_TRAMPOLINE_EMPTY(unsigned char __fastcall HandleWorldMessage_Trampoline(DWORD* con, DWORD edx, unsigned __int32 unk, unsigned __int16 opcode, char* buf, size_t size));
 
@@ -164,21 +200,57 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 	int16_t opcode = 0;
 	memcpy(&opcode, buf, 2);
 
-
+	CHAR szMessage[MAX_STRING] = { 0 };
 	//Let's piggyback this bitch
-
-
-	if (get_first() && get_second()) {
-
+	if (get_spoof_opcode() == 0x39e8 && get_target_id()) { //PickPocket
+		PickPocket_Struct* pick = new PickPocket_Struct;
+		memset(pick, 0, sizeof(PickPocket_Struct));
+		pick->opcode = get_spoof_opcode();
+		pick->to = get_target_id();
+		pick->from = 0;
+		pick->myskill = 200;
+		SendMessage_Trampoline(con, unk, 4, (char*)pick, sizeof(PickPocket_Struct), a6, a7);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		sprintf(szMessage, "Pickpocket sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+	} 
+	else if (get_spoof_opcode() == 0x2703 && get_target_id()) { //OP_Taunt
+		ClientTarget_Struct* target = new ClientTarget_Struct;
+		memset(target, 0, sizeof(ClientTarget_Struct));
+		target->opcode = get_spoof_opcode();
+		target->new_target = get_target_id();
+		SendMessage_Trampoline(con, unk, 4, (char*)target, sizeof(ClientTarget_Struct), a6, a7);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		sprintf(szMessage, "Taunt sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+	}
+	else if (get_spoof_opcode() == 0x68d3 && get_target_id() && get_my_id()) { //Duel
 		Duel_Fuck* duel = new Duel_Fuck;
 		memset(duel, 0, sizeof(Duel_Fuck));
-		duel->opcode = 0x68d3;
-		duel->duel_initiator = get_first();
-		duel->duel_target = get_second();
-		set_first(0);
-		set_second(0);
+		duel->opcode = get_spoof_opcode();
+		duel->duel_initiator = get_target_id();
+		duel->duel_target = get_my_id();
+		set_target_id(0);
+		set_my_id(0);
 		SendMessage_Trampoline(con, unk, 4, (char*)duel, sizeof(Duel_Fuck), a6, a7);
+		sprintf(szMessage, "Duel sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
 	}
+	else if (get_spoof_opcode() == 0x6527 && get_target_id() && get_my_id() >= 0) { //Titles
+		SetTitle_Struct* title = new SetTitle_Struct;
+		memset(title, 0, sizeof(SetTitle_Struct));
+		title->opcode = get_spoof_opcode();
+		title->is_suffix = get_my_id();
+		title->title_id = get_target_id();
+		set_target_id(0);
+		set_my_id(0);
+		SendMessage_Trampoline(con, unk, 4, (char*)title, sizeof(SetTitle_Struct), a6, a7);
+		sprintf(szMessage, "Title sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+	}
+
 
 	/*
 	if (opcode == 0xf13 || opcode == 0x578f)
@@ -444,10 +516,93 @@ VOID SendDuel(PSPAWNINFO pChar, PCHAR szLine)
 		return;
 	}
 
-	set_first(first_id);
-	set_second(second_id);
+	set_spoof_opcode(0x68d3); //Duel OP
+	set_target_id(first_id);
+	set_my_id(second_id);
+}
+
+
+//Fixed Pickpocket infinite range
+VOID PickPocketNow(PSPAWNINFO pChar, PCHAR szLine)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+	CHAR szArg[MAX_STRING] = { 0 };
+
+	if (!pTarget)
+	{
+		sprintf(szBuffer, "Command /leethax requires a target");
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+		return;
+	};
+
+	int spawn_id = ((PSPAWNINFO)pTarget)->SpawnID;
+
+	if (!spawn_id) {
+		sprintf(szBuffer, "Command /leethax id missing args");
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+		return;
+	}
+
+	set_spoof_opcode(0x39e8);
+	set_target_id(spawn_id);
+}
+
+//Any class can taunt
+VOID TauntNow(PSPAWNINFO pChar, PCHAR szLine)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+	CHAR szArg[MAX_STRING] = { 0 };
+
+	if (!pTarget)
+	{
+		sprintf(szBuffer, "Command /leettaunt requires a target");
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+		return;
+	};
+
+	int spawn_id = ((PSPAWNINFO)pTarget)->SpawnID;
+
+	if (!spawn_id) {
+		sprintf(szBuffer, "Command /leettaunt id missing args");
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+		return;
+	}
+
+	set_spoof_opcode(0x2703);
+	set_target_id(spawn_id);
+}
+
+//Use any title...
+VOID FreeTitles(PSPAWNINFO pChar, PCHAR szLine)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+
+	if (!szLine[0]) {
+		SyntaxError("Usage: /title type id");
+		return;
+	}
+	
+	CHAR Arg1[MAX_STRING] = { 0 };
+	CHAR Arg2[MAX_STRING] = { 0 };
+	GetArg(Arg1, szLine, 1);
+	GetArg(Arg2, szLine, 2);
+
+	if (Arg1[0] && Arg2[0]) {
+		int title_type = atoi(Arg1);
+		int title_id = atoi(Arg2);
+
+		sprintf(szBuffer, "Command /title type %d id %d", title_type, title_id);
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+
+		set_spoof_opcode(0x6527);
+		set_my_id(title_type); //Title type
+		set_target_id(title_id); //This will be the title ID
+	}
 }
 
 PLUGIN_API VOID InitializeNatedog(VOID) {
 	AddCommand("/sexbang", SendDuel);
+	AddCommand("/leethax", PickPocketNow);
+	AddCommand("/taunt", TauntNow);
+	AddCommand("/title", FreeTitles);
 }
