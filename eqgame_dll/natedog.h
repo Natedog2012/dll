@@ -214,6 +214,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		set_target_id(0);
 		sprintf(szMessage, "Pickpocket sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		delete pick;
 	} 
 	else if (get_spoof_opcode() == 0x2703 && get_target_id()) { //OP_Taunt
 		ClientTarget_Struct* target = new ClientTarget_Struct;
@@ -225,6 +226,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		set_target_id(0);
 		sprintf(szMessage, "Taunt sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		delete target;
 	}
 	else if (get_spoof_opcode() == 0x68d3 && get_target_id() && get_my_id()) { //Duel
 		Duel_Fuck* duel = new Duel_Fuck;
@@ -237,6 +239,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		SendMessage_Trampoline(con, unk, 4, (char*)duel, sizeof(Duel_Fuck), a6, a7);
 		sprintf(szMessage, "Duel sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		delete duel;
 	}
 	else if (get_spoof_opcode() == 0x6527 && get_target_id() && get_my_id() >= 0) { //Titles
 		SetTitle_Struct* title = new SetTitle_Struct;
@@ -249,6 +252,7 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		SendMessage_Trampoline(con, unk, 4, (char*)title, sizeof(SetTitle_Struct), a6, a7);
 		sprintf(szMessage, "Title sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		delete title;
 	}
 
 
