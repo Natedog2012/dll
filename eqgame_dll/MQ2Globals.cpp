@@ -24,6 +24,7 @@
 #define DBG_SPEW
 
 #include "MQ2Main.h"
+
 namespace MQ2Globals
 {
 

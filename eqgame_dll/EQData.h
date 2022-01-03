@@ -2234,3 +2234,7 @@ enum AggroDataTypes
 #define EQ_LoadingS__ArraySize          0x5b    // EQ_LoadingS__SetProgressBar+8C  12-08-2010
 };
 using namespace EQData;
+
+
+
+

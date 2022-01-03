@@ -15,6 +15,8 @@
 #include "eqgame-private.h"
 #endif
 
+
+
 #define __ClientName                                              "eqgame"
 #define __ExpectedVersionDate                                     "May 10 2013"
 #define __ExpectedVersionTime                                     "23:30:08"
@@ -683,3 +685,4 @@
 
 // PlayerPhysics:
 #define PlayerPhysics__ClampVelocity_x								0x439570
+

@@ -7,6 +7,8 @@
 
 extern IDirect3DDevice9* g_pDevice;
 
+
+
 class Text : Renderable
 {
 public:

@@ -13,6 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ******************************************************************************/
 
+
 #define VersionString "September 23, 2004"
 #define DebugHeader "[Edge]"
 #define LoadedString "Edge Extensions Loaded."
@@ -239,6 +240,7 @@ typedef double DOUBLE;
 #include "MQ2Prototypes.h"
 #include "MQ2Internal.h"
 #include "MQ2Globals.h"
+
 
 /* SPAWN HANDLING */
 EQLIB_API VOID InitializeMQ2Spawns();
@@ -694,6 +696,8 @@ struct EntDamage {
 	int AddTime;
 };
 
+LEGACY_API VOID InitializeNatedog();
+
 void         DestroyDPSWindow();
 void         CreateDPSWindow();
 void         CreateDPSWindow();
@@ -712,6 +716,8 @@ void         DPSAdvCmd(PSPAWNINFO pChar, PCHAR szLine);
 #ifdef DPSDEV
 void         DPSTestCmd(PSPAWNINFO pChar, PCHAR szLine);
 #endif
+
+
 
 class DPSMob {
 public:
@@ -840,3 +846,8 @@ typedef struct DeleteSpawn_Struct
 #define OP_DeleteSpawn 0x7280
 
 MaterialType GetMitigationTextureType(MaterialType material);
+
+
+
+
+

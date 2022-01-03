@@ -164,6 +164,7 @@
     <ClCompile Include="MQ2Spawns.cpp" />
     <ClCompile Include="MQ2Utilities.cpp" />
     <ClCompile Include="MQ2Windows.cpp" />
+    <ClCompile Include="natedog.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
   </ItemGroup>
@@ -197,6 +198,7 @@
     <ClInclude Include="MQ2Main.h" />
     <ClInclude Include="MQ2Prototypes.h" />
     <ClInclude Include="natedog.h" />
+    <ClInclude Include="natedog_globals.h" />
     <ClInclude Include="RECTF.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="RenderHooks.h" />
