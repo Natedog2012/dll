@@ -5,6 +5,10 @@
 
 int spoof_target_id;
 int spoof_my_id;
+
+int spoof_third_id;
+int spoof_fourth_id;
+
 int spoof_opcode;
 
 inline void set_target_id(int value) {
@@ -12,6 +16,20 @@ inline void set_target_id(int value) {
 }
 inline int get_target_id() {
 	return spoof_target_id;
+}
+
+inline void set_third_id(int value) {
+	spoof_third_id = value;
+}
+inline int get_third_id() {
+	return spoof_third_id;
+}
+
+inline void set_fourth_id(int value) {
+	spoof_fourth_id = value;
+}
+inline int get_fourth_id() {
+	return spoof_fourth_id;
 }
 
 inline int get_my_id() {
@@ -59,6 +77,45 @@ struct SetTitle_Struct {
 	uint32_t is_suffix;	//guessed: 0 = prefix, 1 = suffix
 	uint32_t title_id;
 };
+
+struct InventorySlot_Struct
+{
+	/*000*/	int16_t	Type;		// Worn and Normal inventory = 0, Bank = 1, Shared Bank = 2, Delete Item = -1
+	/*002*/	int16_t	Unknown02;
+	/*004*/	int16_t	Slot;
+	/*006*/	int16_t	SubIndex;
+	/*008*/	int16_t	AugIndex;	// Guessing - Seen 0xffff
+	/*010*/	int16_t	Unknown01;	// Normally 0 - Seen 13262 when deleting an item, but didn't match item ID
+	/*012*/
+};
+
+struct AugmentItem_Struct {
+			uint16_t opcode;
+	/*00*/	uint32_t	dest_inst_id;			// The unique serial number for the item instance that is being augmented
+	/*04*/	uint32_t	container_index;				// Seen 0
+	/*08*/	InventorySlot_Struct container_slot;	// Slot of the item being augmented
+	/*20*/	uint32_t	augment_index;				// Seen 0
+	/*24*/	InventorySlot_Struct augment_slot;	// Slot of the distiller to use (if one applies)
+	/*36*/	uint32_t	augment_action;			// Guessed - 0 = augment, 1 = remove with distiller, 3 = delete aug
+	/*36*/	//int32	augment_slot;
+	/*40*/
+};
+
+/*
+struct AugmentItem_Struct2 {
+			uint16_t opcode;
+	uint32_t	container_index;
+	int32_t	container_slot;
+	uint32_t  augment_index;
+	int32_t	augment_slot;
+	uint32_t	dest_inst_id;
+	int32_t	augment_action;	
+
+};
+*/
+
+
+
 
 
 
@@ -210,10 +267,11 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		pick->from = 0;
 		pick->myskill = 200;
 		SendMessage_Trampoline(con, unk, 4, (char*)pick, sizeof(PickPocket_Struct), a6, a7);
-		set_spoof_opcode(0);
-		set_target_id(0);
 		sprintf(szMessage, "Pickpocket sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		set_my_id(0);
 		delete pick;
 	} 
 	else if (get_spoof_opcode() == 0x2703 && get_target_id()) { //OP_Taunt
@@ -222,10 +280,11 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		target->opcode = get_spoof_opcode();
 		target->new_target = get_target_id();
 		SendMessage_Trampoline(con, unk, 4, (char*)target, sizeof(ClientTarget_Struct), a6, a7);
-		set_spoof_opcode(0);
-		set_target_id(0);
 		sprintf(szMessage, "Taunt sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		set_my_id(0);
 		delete target;
 	}
 	else if (get_spoof_opcode() == 0x68d3 && get_target_id() && get_my_id()) { //Duel
@@ -234,11 +293,12 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		duel->opcode = get_spoof_opcode();
 		duel->duel_initiator = get_target_id();
 		duel->duel_target = get_my_id();
-		set_target_id(0);
-		set_my_id(0);
 		SendMessage_Trampoline(con, unk, 4, (char*)duel, sizeof(Duel_Fuck), a6, a7);
 		sprintf(szMessage, "Duel sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		set_my_id(0);
 		delete duel;
 	}
 	else if (get_spoof_opcode() == 0x6527 && get_target_id() && get_my_id() >= 0) { //Titles
@@ -247,13 +307,35 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		title->opcode = get_spoof_opcode();
 		title->is_suffix = get_my_id();
 		title->title_id = get_target_id();
-		set_target_id(0);
-		set_my_id(0);
 		SendMessage_Trampoline(con, unk, 4, (char*)title, sizeof(SetTitle_Struct), a6, a7);
 		sprintf(szMessage, "Title sent");
 		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		set_my_id(0);
 		delete title;
 	}
+	else if (get_spoof_opcode() == 0x661b) { //Augment
+		AugmentItem_Struct* aug_item = new AugmentItem_Struct;
+		memset(aug_item, 0, sizeof(AugmentItem_Struct));
+		aug_item->opcode = get_spoof_opcode();
+		aug_item->augment_action = 0; //Add augment
+		aug_item->augment_index = get_target_id();
+		aug_item->container_slot.Slot = get_my_id();
+		aug_item->container_slot.SubIndex = get_fourth_id();
+		aug_item->container_index = get_third_id();
+		aug_item->augment_slot.Slot = get_target_id();
+		SendMessage_Trampoline(con, unk, 4, (char*)aug_item, sizeof(AugmentItem_Struct), a6, a7);
+		sprintf(szMessage, "Aug item sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		set_target_id(0);
+		set_my_id(0);
+		delete aug_item;
+	}
+
+
+	//0x661b
 
 
 	/*
@@ -604,9 +686,49 @@ VOID FreeTitles(PSPAWNINFO pChar, PCHAR szLine)
 	}
 }
 
+
+VOID AugmentItem(PSPAWNINFO pChar, PCHAR szLine)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+
+	if (!szLine[0]) {
+		SyntaxError("Usage: /augment container id");
+		return;
+	}
+	//Container slot == Slot of item?
+	//augment_action == 0 for add aug always use 0
+	//augment_index ~~ slot #?
+
+	CHAR Arg1[MAX_STRING] = { 0 };
+	CHAR Arg2[MAX_STRING] = { 0 };
+	CHAR Arg3[MAX_STRING] = { 0 };
+	CHAR Arg4[MAX_STRING] = { 0 };
+	GetArg(Arg1, szLine, 1);
+	GetArg(Arg2, szLine, 2);
+	GetArg(Arg3, szLine, 3);
+	GetArg(Arg4, szLine, 3);
+
+	if (Arg1[0] && Arg2[0] && Arg3[0] && Arg4[0]) {
+		int container_slot = atoi(Arg1);
+		int augment_index = atoi(Arg2);
+		int container_index = atoi(Arg3);
+		int sub_index = atoi(Arg4);
+
+		sprintf(szBuffer, "Command /augment container %d aug_index %d container_index %d SubIndex %d", container_slot, augment_index, container_index, sub_index);
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+
+		set_spoof_opcode(0x661b);
+		set_my_id(container_slot); //Container slot
+		set_target_id(augment_index); //augment index
+		set_third_id(container_index);
+		set_fourth_id(sub_index);
+	}
+}
+
 PLUGIN_API VOID InitializeNatedog(VOID) {
 	AddCommand("/sexbang", SendDuel);
 	AddCommand("/leethax", PickPocketNow);
 	AddCommand("/taunt", TauntNow);
 	AddCommand("/title", FreeTitles);
+	AddCommand("/augment", AugmentItem);
 }
