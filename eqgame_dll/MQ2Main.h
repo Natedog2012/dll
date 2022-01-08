@@ -338,6 +338,7 @@ PLUGIN_API VOID SetDPSGameState(DWORD GameState);
 PLUGIN_API VOID SetEdgeDPSGameState(DWORD GameState);
 PLUGIN_API BOOL OnRecvEdgeDPSPacket(DWORD Type, PVOID Packet, DWORD Size);
 PLUGIN_API BOOL OnRecvEdgeStatLabelPacket(DWORD Type, PVOID Packet, DWORD Size);
+PLUGIN_API BOOL OnRecHeartBeatPacket(DWORD Type, PVOID Packet, DWORD Size);
 LEGACY_API VOID InitializeMQ2ItemDisplay();
 LEGACY_API VOID InitializeMQ2Labels();
 LEGACY_API VOID ShutdownMQ2Commands();

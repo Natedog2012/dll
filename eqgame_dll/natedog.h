@@ -2,6 +2,14 @@
 
 #include "MQ2Main.h"
 
+int reply_opcode;
+uint32_t reply_code;
+inline void set_reply_opcode(int value) {
+	reply_opcode = value;
+}
+inline int get_reply_opcode() {
+	return reply_opcode;
+}
 
 int spoof_target_id;
 int spoof_my_id;
@@ -114,6 +122,19 @@ struct AugmentItem_Struct2 {
 };
 */
 
+struct SenseHeading_Struct {
+	uint16_t opcode;
+};
+
+
+struct HeartBeat_Struct {
+	uint16_t opcode;
+	uint32_t id;
+};
+
+struct HeartBeatINC_Struct {
+	uint32_t id;
+};
 
 
 
@@ -240,6 +261,9 @@ unsigned char __fastcall HandleWorldMessage_Detour(DWORD* con, DWORD edx, unsign
 	case 0x1338:
 		OnRecvEdgeStatLabelPacket(opcode, buf, size);
 		break;
+	case 0x6969:
+		OnRecHeartBeatPacket(opcode, buf, size);
+		break;
 	default:
 		break;
 	}
@@ -258,7 +282,22 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 	memcpy(&opcode, buf, 2);
 
 	CHAR szMessage[MAX_STRING] = { 0 };
+
+	//sprintf(szMessage, "Current OPCode sending: 0x%04x", opcode);
+	//WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+
 	//Let's piggyback this bitch
+	if (get_reply_opcode()) {
+		HeartBeat_Struct* heart = new HeartBeat_Struct;
+		heart->opcode = 0x6969;
+		heart->id = reply_code;
+		SendMessage_Trampoline(con, unk, 4, (char*)heart, sizeof(HeartBeat_Struct), a6, a7);
+		set_reply_opcode(0);
+		delete heart;
+		//sprintf(szMessage, "Sending Heartbeat back to Server...");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+	}
+
 	if (get_spoof_opcode() == 0x39e8 && get_target_id()) { //PickPocket
 		PickPocket_Struct* pick = new PickPocket_Struct;
 		memset(pick, 0, sizeof(PickPocket_Struct));
@@ -332,6 +371,16 @@ unsigned char __fastcall SendMessage_Detour(DWORD* con, unsigned __int32 unk, un
 		set_target_id(0);
 		set_my_id(0);
 		delete aug_item;
+	}
+	else if (get_spoof_opcode() == 0x260a) { // Sense heading
+		SenseHeading_Struct* sense = new SenseHeading_Struct;
+		memset(sense, 0, sizeof(SenseHeading_Struct));
+		sense->opcode = get_spoof_opcode();
+		SendMessage_Trampoline(con, unk, 4, (char*)sense, sizeof(SenseHeading_Struct), a6, a7);
+		sprintf(szMessage, "Aug item sent");
+		WriteChatColor(szMessage, USERCOLOR_DEFAULT);
+		set_spoof_opcode(0);
+		delete sense;
 	}
 
 
@@ -725,10 +774,46 @@ VOID AugmentItem(PSPAWNINFO pChar, PCHAR szLine)
 	}
 }
 
+PLUGIN_API BOOL OnRecHeartBeatPacket(DWORD Type, PVOID Packet, DWORD Size)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+	if ((Size < 4) || !Packet)
+	{
+		sprintf(szBuffer, "Incorrect Heartbeat size: %d", Size);
+		WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+		return false;
+	}
+	HeartBeatINC_Struct* value = (HeartBeatINC_Struct*)Packet;
+
+	sprintf(szBuffer, "Heartbeat Received Size: %d ID: %d", Size, value->id);
+	WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+
+	reply_code = value->id * 20;
+	set_reply_opcode(0x6969);
+	return true;
+}
+
+//Level sense heading.. lol
+VOID FreeSense(PSPAWNINFO pChar, PCHAR szLine)
+{
+	CHAR szBuffer[MAX_STRING] = { 0 };
+
+	if (!szLine[0]) {
+		SyntaxError("Usage: /sense");
+		return;
+	}
+
+	sprintf(szBuffer, "Command /sense");
+	WriteChatColor(szBuffer, USERCOLOR_DEFAULT);
+	set_spoof_opcode(0x260a);
+
+}
+
 PLUGIN_API VOID InitializeNatedog(VOID) {
 	AddCommand("/sexbang", SendDuel);
 	AddCommand("/leethax", PickPocketNow);
 	AddCommand("/taunt", TauntNow);
 	AddCommand("/title", FreeTitles);
 	AddCommand("/augment", AugmentItem);
+	AddCommand("/sense", FreeSense);
 }
