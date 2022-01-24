@@ -756,6 +756,14 @@ void InitHooks()
 
 	   EzDetour((DWORD)var, SendMessage_Detour, SendMessage_Trampoline);
 
+	   //AA STUFF
+	   var = (((DWORD)0x0060A22F - 0x400000) + baseAddress);
+	   PatchA((DWORD*)var, "\x01", 1);
+	   var = (((DWORD)0x0060A1D4 - 0x400000) + baseAddress);
+	   PatchA((DWORD*)var, "\x01", 1);
+	   var = (((DWORD)0x0060A132 - 0x400000) + baseAddress);
+	   PatchA((DWORD*)var, "\x00", 1);
+
 
 	   var = (((DWORD)0x004C3250 - 0x400000) + baseAddress);
 
