@@ -781,12 +781,12 @@ void InitHooks()
 
 
 	   //basedata as spell CRC begin
-	   var = (((DWORD)0x00AA6980 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "spells_us.txt", 13);
-
-	   DWORD varToPatch = (((DWORD)0x00AA6980 - 0x400000) + baseAddress);
-	   var = (((DWORD)0x004EEAAB - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, (void*)&varToPatch, 4);
+	   //var = (((DWORD)0x00AA6980 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "spells_us.txt", 13);
+	   //
+	   //DWORD varToPatch = (((DWORD)0x00AA6980 - 0x400000) + baseAddress);
+	   //var = (((DWORD)0x004EEAAB - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, (void*)&varToPatch, 4);
 	   //basedata as spell CRC end
 
 	   //Change ZONE NAMES??
@@ -872,8 +872,8 @@ void InitHooks()
 	   //var = (((DWORD)0x00632E08 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90", 2); // nop trader check
 
-	   var = (((DWORD)0x005FE751 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\xEB\x1C\x90\x90\x90", 5); // patchme req bypass
+	   //var = (((DWORD)0x005FE751 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\xEB\x1C\x90\x90\x90", 5); // patchme req bypass
 
 	   //var = (((DWORD)0x006A3FB0 - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\xEB", 3); // nop / jmp dmg bonus #2
@@ -919,9 +919,9 @@ void InitHooks()
 	   // var = (((DWORD)0x0064920D - 0x400000) + baseAddress);
 	   //      PatchA((DWORD*)var, "\x10", 1);
 
-	   var = (((DWORD)0x00444158 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",
-		   12); // Fix max HP cap
+	   //var = (((DWORD)0x00444158 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",
+		//   12); // Fix max HP cap
 
 	   //var = (((DWORD)0x0045F26E - 0x400000) + baseAddress);
 	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\xE9\xB3\x01\x00\x00\x90",11); // Disable regen ticks // maybe hp
@@ -932,46 +932,46 @@ void InitHooks()
 	   var = (((DWORD)0x0045E381 - 0x400000) + baseAddress);
 	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90", 8); // No unconscious pls
 
-	   var = (((DWORD)0x00449E3B - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\xE9\x1B\x01\x00\x00\x90", 13); // HP fix - the real deal
+	   //var = (((DWORD)0x00449E3B - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\xE9\x1B\x01\x00\x00\x90", 13); // HP fix - the real deal
+	   //
+	   //var = (((DWORD)0x00449F62 - 0x400000) + baseAddress); // HP fix - the real deal
+	   //PatchA((DWORD*)var, "\x90\x90", 2);
+	   //var = (((DWORD)0x00449F64 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",13); // Fix current HP cap
+	   //
+	   //var = (((DWORD)0x00444308 - 0x400000) + baseAddress);
+	   //PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current mana amounts
 
-	   var = (((DWORD)0x00449F62 - 0x400000) + baseAddress); // HP fix - the real deal
-	   PatchA((DWORD*)var, "\x90\x90", 2);
-	   var = (((DWORD)0x00449F64 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",13); // Fix current HP cap
-
-	   var = (((DWORD)0x00444308 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current mana amounts
-
-	   var = (((DWORD)0x00444198 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current endur
-
-	   var = (((DWORD)0x0045AE9F - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\xE9\x76\x03\x00\x00\x90",8); // Fix food/drink spam
-
-	   var = (((DWORD)0x0045385D - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 30); //hp damage in combat abilities fix
-
-	   var = (((DWORD)0x00409776 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
-
-	   var = (((DWORD)0x00409793 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
-
-	   var = (((DWORD)0x004097DC - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
-
-	   var = (((DWORD)0x00409882 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\xFB", 1); // Monk armor fix
-
-	   var = (((DWORD)0x004098AD - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
-
-	   var = (((DWORD)0x00409953 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\xFB", 1); // Monk armor fix
-
-	   var = (((DWORD)0x00409968 - 0x400000) + baseAddress);
-	   PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
+	  // var = (((DWORD)0x00444198 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x90\x90\xEB\x64",4); // Fix current endur
+	  //
+	  // var = (((DWORD)0x0045AE9F - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x90\x90\xE9\x76\x03\x00\x00\x90",8); // Fix food/drink spam
+	  //
+	  // var = (((DWORD)0x0045385D - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 30); //hp damage in combat abilities fix
+	  //
+	  // var = (((DWORD)0x00409776 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x00409793 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x004097DC - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x00409882 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\xFB", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x004098AD - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x00409953 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\xFB", 1); // Monk armor fix
+	  //
+	  // var = (((DWORD)0x00409968 - 0x400000) + baseAddress);
+	  // PatchA((DWORD*)var, "\x05", 1); // Monk armor fix
 
 	  // var = (((DWORD)0x00443631 - 0x400000) + baseAddress);
 	  // PatchA((DWORD*)var, "\xB0\x01\x5E\xC2\x04\x00\x90", 7); // Group marker in a party of 2
